@@ -1,6 +1,8 @@
 // @flow
 
 import React from 'react';
+import memoize from 'memoize-one';
+import throttle from 'lodash.throttle';
 import ListItem from '@material-ui/core/ListItem';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -8,6 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
+import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
 import {
   PlayArrow as PlayIcon,
@@ -38,10 +41,12 @@ const styles = () => ({
     width: 100,
     marginRight: 20,
   },
+  comment: {
+    width: '100%',
+  },
   chipList: {
     overflowX: 'scroll',
     display: 'flex',
-    paddingBottom: 20,
   },
   chip: {
     marginRight: 10,
@@ -52,15 +57,32 @@ const styles = () => ({
 type Props = {
   student: StudentType,
   onToggle: (login: string) => void,
+  onRemoveBreak: (login: string, date: string) => void,
+  onEditComment: (login: string, comment: string) => void,
   classes: Object, // provided by HOC
 };
 
 class Item extends React.PureComponent<Props> {
+  commentRef: React.Ref = null;
+
   onToggle = () => {
     const { onToggle, student } = this.props;
 
     onToggle(student.login);
-  }
+  };
+
+  onRemoveBreak = memoize((breakDate: string) => {
+    const { student, onRemoveBreak } = this.props;
+    onRemoveBreak(student.login, breakDate);
+  });
+
+  onEditComment = () => {
+    if (!this.commentRef) return;
+
+    const { onEditComment, student } = this.props;
+    const { value } = this.commentRef;
+    onEditComment(student.login, value);
+  };
 
   renderChip = (breakValue: BreakType, index: number) => {
     const { classes } = this.props;
@@ -71,6 +93,7 @@ class Item extends React.PureComponent<Props> {
         className={classes.chip}
         label={`${begin} - ${end}`}
         key={`${begin}_${end}_${index}`}
+        onDelete={this.onRemoveBreak.bind(this, `${begin} -> ${end}`)}
         icon={<WatchIcon />}
       />
     );
@@ -85,7 +108,7 @@ class Item extends React.PureComponent<Props> {
     return <PlayIcon />;
   }
 
-  renderUpperSide() {
+  renderProfileInformation() {
     const { classes, student } = this.props;
     const [firstname, lastname] = student.login.split('.');
 
@@ -118,7 +141,7 @@ class Item extends React.PureComponent<Props> {
     );
   }
 
-  renderLowerSide() {
+  renderChipList() {
     const { classes, student } = this.props;
 
     return (
@@ -128,13 +151,32 @@ class Item extends React.PureComponent<Props> {
     );
   }
 
+  renderComment() {
+    const { student, classes } = this.props;
+
+    return (
+      <TextField
+        className={classes.comment}
+        label='comment'
+        rowsMax='4'
+        defaultValue={student.comment}
+        onBlur={this.onEditComment}
+        margin='normal'
+        variant='outlined'
+        inputRef={r => this.commentRef = r}
+        multiline
+      />
+    );
+  }
+
   render() {
     const { classes } = this.props;
 
     return (
       <div className={classes.container}>
-        {this.renderUpperSide()}
-        {this.renderLowerSide()}
+        {this.renderProfileInformation()}
+        {this.renderChipList()}
+        {this.renderComment()}
       </div>
     );
   }

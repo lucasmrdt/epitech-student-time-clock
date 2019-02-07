@@ -10,6 +10,7 @@ export type BreakType = {
 export type StudentType = {
     login: string,
     breaks: Array<BreakType>,
+    comment: string,
     status: StatusType,
     lastUpdate: number,
 };

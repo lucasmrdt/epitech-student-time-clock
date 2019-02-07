@@ -1,8 +1,10 @@
 // @flow
 
 import {
-    BREAK_URL,
     LOGINS_URL,
+    COMMENT_URL,
+    REMOVE_BREAK_URL,
+    TOGGLE_BREAK_URL,
 } from 'constants/network';
 
 import {
@@ -28,6 +30,7 @@ const parseData = (data: Array<StudentType>) => {
             login: student.login,
             lastUpdate: student.lastUpdate,
             status: student.status,
+            comment: student.comment,
             breaks,
         }
     });
@@ -36,10 +39,29 @@ const parseData = (data: Array<StudentType>) => {
 };
 
 export const toggleBreak = async (login: string, date: string) => {
-    console.log('okkkk')
-    const res = await fetch(BREAK_URL, {
+    const res = await fetch(TOGGLE_BREAK_URL, {
         method: 'POST',
         body: JSON.stringify({ login, date }),
+        headers: { 'Content-Type': 'application/json' },
+    });
+    const data: Array<StudentType> = await res.json();
+    return parseData(data);
+};
+
+export const removeBreak = async (login: string, date: string) => {
+const res = await fetch(REMOVE_BREAK_URL, {
+        method: 'POST',
+        body: JSON.stringify({ login, date }),
+        headers: { 'Content-Type': 'application/json' },
+    });
+    const data: Array<StudentType> = await res.json();
+    return parseData(data);
+};
+
+export const updateComment = async (login: string, comment: string) => {
+    const res = await fetch(COMMENT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ login, comment }),
         headers: { 'Content-Type': 'application/json' },
     });
     const data: Array<StudentType> = await res.json();

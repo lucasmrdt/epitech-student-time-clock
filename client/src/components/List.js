@@ -5,7 +5,12 @@ import { withStyles } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import MaterialList from '@material-ui/core/List';
 import Item from './Item';
-import { getStudents, toggleBreak } from 'api';
+import {
+  getStudents,
+  toggleBreak,
+  updateComment,
+  removeBreak,
+} from 'api';
 import { formateToNChar } from 'utils';
 
 import { type StudentType } from 'types/DataTypes';
@@ -59,7 +64,7 @@ class List extends React.PureComponent<Props, State> {
     try {
       const students = await getStudents();
       this.setState({ students, status: 'success' });
-    } catch(e) {
+    } catch (e) {
       console.error('fail to get logins.');
       this.setState({ status: 'failed' });
     }
@@ -70,14 +75,41 @@ class List extends React.PureComponent<Props, State> {
     const hours = `${date.getHours()}`;
     const minutes = `${date.getMinutes()}`;
     const formatedDate = `${formateToNChar(hours, 2)}:${formateToNChar(minutes, 2)}`;
-    const students = await toggleBreak(login, formatedDate);
-    this.setState({ students });
+    try {
+      const students = await toggleBreak(login, formatedDate);
+      this.setState({ students });
+    } catch (e) {
+      console.error(e);
+      alert('fail to toggle student break.');
+    }
   }
+
+  onRemoveStudentBreak = async (login: string, date: string) => {
+    try {
+      const students = await removeBreak(login, date);
+      this.setState({ students });
+    } catch (e) {
+      console.error(e);
+      alert('fail to remove break.');
+    }
+  };
+
+  onEditComment = async (login: string, comment: string) => {
+    try {
+      const students = await updateComment(login, comment);
+      this.setState({ students });
+    } catch (e) {
+      console.error(e);
+      alert('fail to update comment.');
+    }
+  };
 
   renderItem = (student: StudentType, index: number) => (
     <Item
       key={`${student.login}_${index}`}
       onToggle={this.onToggleStudent}
+      onRemoveBreak={this.onRemoveStudentBreak}
+      onEditComment={this.onEditComment}
       student={student}
     />
   )
@@ -96,7 +128,6 @@ class List extends React.PureComponent<Props, State> {
 
   renderLoading() {
     const { classes } = this.props;
-    console.log(this.props);
 
     return (
       <CircularProgress className={classes.center} />
