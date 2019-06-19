@@ -4,6 +4,7 @@ WORKDIR /usr/client
 
 COPY package.json .
 RUN npm install
+RUN npm install -g serve
 
 EXPOSE 1235
-CMD ["npm", "start"]
+CMD ["npm", "run", "deploy"]

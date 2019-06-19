@@ -59,5 +59,5 @@ app.get('/logins', async (req, res) => {
 });
 
 app.listen(port, async () => {
-    console.log(`✅ Server is ready http://localhost:${port} !`);
+    console.log(`✅ Server is ready !`);
 });

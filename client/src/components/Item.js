@@ -2,7 +2,6 @@
 
 import React from 'react';
 import memoize from 'memoize-one';
-import throttle from 'lodash.throttle';
 import ListItem from '@material-ui/core/ListItem';
 import Avatar from '@material-ui/core/Avatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
