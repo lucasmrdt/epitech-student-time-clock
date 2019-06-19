@@ -7,6 +7,7 @@ services:
       - 1234:1234
     volumes:
       - ./server:/usr/server
+      - /usr/server/node_modules
   epitech_time_clock_client:
     container_name: epitech_time_clock_client
     build: ./client
@@ -14,5 +15,6 @@ services:
       - 1235:1235
     volumes:
       - ./client:/usr/client
+      - /usr/client/node_modules
     links:
       - epitech_time_clock_server
