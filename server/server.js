@@ -59,6 +59,5 @@ app.get('/logins', async (req, res) => {
 });
 
 app.listen(port, async () => {
-    console.log('ok')
-    console.log(`Break pointer app is ready http://localhost:${port}!`);
+    console.log(`✅ Server is ready http://localhost:${port} !`);
 });
