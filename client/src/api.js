@@ -23,7 +23,7 @@ const sortByLogin = (students: Array<StudentType>) => (
 const parseData = (data: Array<StudentType>) => {
     const mappedData = data.map(student => {
         const breaks: Array<BreakType> = student.breaks.map(b => {
-            const [begin, end] = b.split(/ *-> */);
+            const [begin, end] = b.split(/ *->? */);
             return { begin, end };
         });
         return {

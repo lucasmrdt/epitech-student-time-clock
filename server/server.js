@@ -6,7 +6,7 @@ const cors = require('cors');
 const Database = require('./src/database');
 
 const app = express();
-const port = 3003;
+const port = 1234;
 
 const FILENAME = 'template.xlsx';
 const STORE = new Database(FILENAME);
@@ -59,5 +59,6 @@ app.get('/logins', async (req, res) => {
 });
 
 app.listen(port, async () => {
+    console.log('ok')
     console.log(`Break pointer app is ready http://localhost:${port}!`);
 });

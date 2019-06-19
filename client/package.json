@@ -15,7 +15,8 @@
     "react-scripts": "2.1.3"
   },
   "scripts": {
-    "start": "./scripts/prepare_env.sh && react-scripts start",
+    "start": "PORT=1235 react-scripts start",
+    "pre-build": "./scripts/prepare_env.sh",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

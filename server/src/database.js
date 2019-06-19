@@ -47,7 +47,7 @@ class Database {
         ...(this.store[login] || initStoreInformations),
         login,
         breaks: (breaksCell.value
-          ? breaksCell.value.split(NEWLINE)
+          ? breaksCell.value.split(/\r\n|,/)
           : []
         ),
         _comment: commentCell,
