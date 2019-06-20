@@ -17,7 +17,6 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "pre-build": "./scripts/prepare_env.sh",
     "deploy": "serve -s build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
