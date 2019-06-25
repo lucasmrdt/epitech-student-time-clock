@@ -7,7 +7,6 @@ RUN apt-get update
 RUN apt-get install net-tools
 RUN npm install
 RUN npm install -g serve
-RUN npm run build
 
-EXPOSE 5000
-CMD ["npm", "run", "deploy"]
+CMD npm run build && serve -l 5000 -s build
+EXPOSE 3000
